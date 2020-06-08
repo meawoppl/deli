@@ -1,9 +1,11 @@
 package deli;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-
+import deli.transforms.PointTransformer;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class Triangle {
   public static class DegenerateTriangle extends Exception {}
@@ -15,7 +17,7 @@ public class Triangle {
   private final boolean degenerate;
   private final double[] normalizedForm;
 
-  public Triangle(Vector3D ... points) {
+  public Triangle(Vector3D... points) {
     this.a = points[0];
     this.b = points[1];
     this.c = points[2];
@@ -26,26 +28,25 @@ public class Triangle {
     Vector3D cross = v1.crossProduct(v2);
 
     this.degenerate = cross.getNorm() == 0.0;
-    if(degenerate) {
-      normalizedForm = new double[]{};
+    if (degenerate) {
+      normalizedForm = new double[] {};
     } else {
       Vector3D normed = cross.normalize();
       double i = this.a.dotProduct(normed);
-      normalizedForm = new double[]{
-              normed.getX(),
-              normed.getY(),
-              normed.getZ(),
-              i
-      };
+      normalizedForm = new double[] {normed.getX(), normed.getY(), normed.getZ(), i};
     }
   }
 
+  public Triangle(List<Vector3D> points) {
+    this(points.get(0), points.get(1), points.get(2));
+  }
+
   public Vector3D[] getPoints() {
-    return new Vector3D[]{this.a, this.b, this.c};
+    return new Vector3D[] {this.a, this.b, this.c};
   }
 
   public void throwIfDegenerate() throws DegenerateTriangle {
-    if (degenerate){
+    if (degenerate) {
       throw new DegenerateTriangle();
     }
   }
@@ -65,16 +66,21 @@ public class Triangle {
    *
    * @return boolean
    */
-  public boolean isDegenerate(){
+  public boolean isDegenerate() {
     return this.a == this.b || this.b == this.c || this.c == this.a;
   }
 
-  double minZ(){
+  double minZ() {
     return Math.min(Math.min(a.getZ(), b.getZ()), c.getZ());
   }
 
   double maxZ() {
     return Math.max(Math.max(a.getZ(), b.getZ()), c.getZ());
+  }
+
+  public Triangle transform(PointTransformer xform) {
+    return new Triangle(
+        Arrays.stream(this.getPoints()).map(xform::transform).collect(Collectors.toList()));
   }
 
   @Override
@@ -91,9 +97,9 @@ public class Triangle {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Triangle triangle = (Triangle) o;
-    return Objects.equals(a, triangle.a) &&
-            Objects.equals(b, triangle.b) &&
-            Objects.equals(c, triangle.c);
+    return Objects.equals(a, triangle.a)
+        && Objects.equals(b, triangle.b)
+        && Objects.equals(c, triangle.c);
   }
 
   @Override

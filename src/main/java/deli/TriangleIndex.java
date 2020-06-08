@@ -2,7 +2,6 @@ package deli;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,7 +13,7 @@ public class TriangleIndex {
   private final double[] index;
   private final Function<Triangle, Double> orderer;
 
-  public static final ImmutableList<Triangle> EMPTY = ImmutableList.copyOf(new Triangle[]{});
+  public static final ImmutableList<Triangle> EMPTY = ImmutableList.copyOf(new Triangle[] {});
 
   public TriangleIndex(Collection<Triangle> tris, Function<Triangle, Double> orderer) {
     List<Triangle> temp = Lists.newArrayList(tris);
@@ -33,16 +32,16 @@ public class TriangleIndex {
   }
 
   private int indexToArrayBound(int index) {
-    if (index < 0){
-      if (index == -1){
+    if (index < 0) {
+      if (index == -1) {
         return 0;
       }
-      return -index-1;
+      return -index - 1;
     }
     return index;
   }
 
-  private double ulpInc(double value){
+  private double ulpInc(double value) {
     return value + Math.ulp(value);
   }
 
@@ -50,15 +49,15 @@ public class TriangleIndex {
     return value - Math.ulp(value);
   }
 
-  private int searchIndex(double value){
+  private int searchIndex(double value) {
     return indexToArrayBound(Arrays.binarySearch(index, value));
   }
 
-  public ImmutableList<Triangle> between(Triangle min, Triangle max){
-    return  between(orderer.apply(min), orderer.apply(max));
+  public ImmutableList<Triangle> between(Triangle min, Triangle max) {
+    return between(orderer.apply(min), orderer.apply(max));
   }
 
-  public ImmutableList<Triangle> between(double minInclusive, double maxInclusive){
+  public ImmutableList<Triangle> between(double minInclusive, double maxInclusive) {
     int lowerIndex = searchIndex(minInclusive);
     int upperIndex = searchIndex(ulpInc(maxInclusive));
 
@@ -66,7 +65,7 @@ public class TriangleIndex {
   }
 
   public ImmutableList<Triangle> lte(double lt) {
-    if (index.length == 0){
+    if (index.length == 0) {
       return EMPTY;
     }
 
@@ -77,7 +76,6 @@ public class TriangleIndex {
 
     int upperIndex = searchIndex(lt);
     return indexed.subList(0, upperIndex);
-
   }
 
   public ImmutableList<Triangle> lt(Triangle lt) {
@@ -89,7 +87,7 @@ public class TriangleIndex {
   }
 
   public ImmutableList<Triangle> gte(double gte) {
-    if (index.length == 0){
+    if (index.length == 0) {
       return EMPTY;
     }
 
@@ -101,6 +99,7 @@ public class TriangleIndex {
     int lowerIndex = searchIndex(gte);
     return indexed.subList(lowerIndex, index.length);
   }
+
   public ImmutableList<Triangle> gt(Triangle gt) {
     return gt(orderer.apply(gt));
   }

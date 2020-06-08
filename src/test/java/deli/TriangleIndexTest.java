@@ -1,11 +1,10 @@
 package deli;
 
+import java.util.List;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
-
-import java.util.List;
 
 public class TriangleIndexTest extends Assertions {
   private static Triangle a = new Triangle(Vector3D.PLUS_K, Vector3D.PLUS_K, Vector3D.PLUS_K);
@@ -46,7 +45,7 @@ public class TriangleIndexTest extends Assertions {
   }
 
   @Test
-  public void testLessThan(){
+  public void testLessThan() {
     TriangleIndex index = new TriangleIndex(TEST_TRIPLET, Triangle::minZ);
 
     assertThat(index.lt(-1)).isEmpty();
@@ -54,9 +53,8 @@ public class TriangleIndexTest extends Assertions {
   }
 
   @Test
-  public void testGreaterThan(){
+  public void testGreaterThan() {
     TriangleIndex index = new TriangleIndex(TEST_TRIPLET, Triangle::minZ);
     assertThat(index.gt(-1)).containsExactly(b, a);
   }
-
 }

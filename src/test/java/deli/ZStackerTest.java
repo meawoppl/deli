@@ -1,13 +1,11 @@
 package deli;
 
+import static org.junit.Assert.*;
+
 import com.google.common.collect.Lists;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
 
 public class ZStackerTest extends Assertions {
   @Test

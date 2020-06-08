@@ -1,12 +1,11 @@
 package deli;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 public class StlReaderTest extends Assertions {
 
